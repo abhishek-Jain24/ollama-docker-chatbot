@@ -3,6 +3,12 @@
 A simple chatbot built with Streamlit and Ollama, powered by the
 `mistral:latest` model, with Docker support.
 
+<img
+  src="Screenshot%202026-10-25%20111218.png"
+  alt="Ollama Docker Chatbot Screenshot"
+  width="800"
+>
+
 ## Features
 
 - Simple chat interface
