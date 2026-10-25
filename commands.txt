@@ -1,0 +1,100 @@
+Classroom command reference
+Run every command from this project folder (the folder that contains the Dockerfile).
+
+The API key stays in a local .env file. Docker reads it when the container starts.
+It is not copied into the image.
+
+
+1. Create a local .env file and add your API key
+
+Windows Command Prompt:
+copy .env.example .env
+
+Windows PowerShell:
+Copy-Item .env.example .env
+
+macOS or Linux:
+cp .env.example .env
+
+Open .env in a text editor. Replace your_openai_api_key_here with your real
+OpenAI API key. Leave OPENAI_MODEL as gpt-4o-mini unless you want another model.
+
+What this does: .env.example is a safe template. .env is the real file and
+must stay on your machine.
+
+
+2. Run the app locally, without Docker
+
+python -m venv .venv
+
+Windows Command Prompt or PowerShell:
+.venv\Scripts\activate
+
+macOS or Linux:
+source .venv/bin/activate
+
+pip install -r requirements.txt
+streamlit run app.py
+
+What this does: the virtual environment holds the Python packages.
+streamlit run starts the app and opens http://localhost:8501
+Stop it with Ctrl+C.
+
+
+3. Build the Docker image
+
+docker build -t genai-chatbot .
+
+What this does: Docker follows the Dockerfile and packages the app into an
+image named genai-chatbot. The "." means "use the files in this folder."
+The .env file is ignored, so the key is not stored in the image.
+
+
+4. Run the container
+
+docker run -d --name genai-chatbot -p 8501:8501 --env-file .env genai-chatbot
+
+What this does:
+- -d runs the container in the background
+- --name genai-chatbot gives it a name you can stop later
+- -p 8501:8501 maps port 8501 on your computer to port 8501 in the container
+- --env-file .env passes the API key and model in at startup
+- genai-chatbot is the image built in step 3
+
+If port 8501 is already in use, change only the first number, for example
+-p 8502:8501, and open http://localhost:8502 instead.
+
+
+5. Open the app in a browser
+
+http://localhost:8501
+
+To see the startup log:
+docker logs genai-chatbot
+
+
+6. List running containers
+
+docker ps
+
+What this does: shows containers that are running, including genai-chatbot
+and the port mapping 0.0.0.0:8501->8501/tcp.
+
+
+7. Stop and remove the container
+
+docker stop genai-chatbot
+docker rm genai-chatbot
+
+What this does: stop shuts the app down. rm deletes the container.
+The image is still on your computer after these two commands.
+
+
+8. List images and remove the demonstration image
+
+docker images
+docker rmi genai-chatbot
+
+What this does: docker images lists local images. docker rmi deletes the
+genai-chatbot image. Remove the container first (step 7) before removing
+the image.
